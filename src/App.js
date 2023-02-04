@@ -1,24 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from "react-router-dom"
+import SpalshScreen from './screens/spalsh_screen';
+import LoginScreen from "./screens/login_screen"
+import RoomsScreen from './screens/rooms_screen';
+import DevicesScreen from './screens/devices_screen';
+import { SocketContext } from './context/socket_context';
+import NotificationScreen from './screens/notification_screen';
+import ProfileScreen from './screens/profile_screen';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="">
+      <Routes>
+        <Route path="/" element={ <SpalshScreen/> } />
+        <Route path="/login" element={ <LoginScreen/> } />
+        <Route path="/rooms" element={ <RoomsScreen/> } />
+        <Route path="/devices" element={ <DevicesScreen/> } />
+        <Route path='notifications' element={<NotificationScreen/>}/>
+        <Route path='profile' element={<ProfileScreen/>}/>
+      </Routes>
     </div>
   );
 }
