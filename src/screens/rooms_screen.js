@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DUMMY_ROOMS } from '../data/dummy_data';
 import InAppLayout from '../layouts/InAppLayout';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
 
 import useLongPress from "../utils/useLongPress";
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Circles } from 'react-loader-spinner';
+import { GlobalContext } from '../context/context';
 
 
 export default function RoomsScreen(){
 
-    const [rooms, setRooms] = useState([])
+    // const [rooms, setRooms] = useState([])
     const navigate = useNavigate()
+
+    const globalContext = useContext(GlobalContext)
 
 
     
@@ -24,30 +25,18 @@ export default function RoomsScreen(){
        
     }
     const onClickRoom = (e) =>{
-       
         navigate({pathname:"/devices", search: createSearchParams({room_id: e._id, title: e.title}).toString()})
     }
 
     const longPressEvent = useLongPress(onLongPress, (e) => { }, { shouldPreventDefault: !true, delay: 500})
 
-    const getRoomsAsync = async () =>{
-        return new Promise((resolve)=>{
-            setTimeout(() => {
-                resolve(DUMMY_ROOMS)
-            }, 1000);
-        })
-    }
+    // const getRooms = () =>{
+    //     return globalContext.rooms ? globalContext.rooms : []
+    // }
 
 
-    useEffect(()=>{
-        setup();
-    },[])
 
-    const setup = async () =>{
-        setRooms(await getRoomsAsync());
-    }
-
-    if(rooms.length == 0) 
+    if(!globalContext.rooms) 
     return (
         <InAppLayout>
             <div className='h-screen flex justify-center items-center'>
@@ -72,7 +61,7 @@ export default function RoomsScreen(){
                     <div className='font-bold text-green-500'>Your Rooms:</div>
                     <Box sx={{ width: '100%', marginTop:"1rem" }}>
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                            {rooms.map(room => 
+                            {globalContext.rooms?.map(room => 
                                 <Grid item xs={6} {...longPressEvent}>
                                     <div onClick={(e) => onClickRoom(room)}>
                                         <Item>{room.title}</Item>

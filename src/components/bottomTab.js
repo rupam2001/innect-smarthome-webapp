@@ -15,7 +15,6 @@ export default function BottomTab(){
         switch (tabname) {
             case "Rooms":
                 navigate("/rooms");
-                
                 break;
             case "Notifications":
                 navigate("/notifications");

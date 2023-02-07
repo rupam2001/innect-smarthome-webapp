@@ -6,14 +6,14 @@ export default function InAppLayout({children}){
 
 
     return (
-        <SocketContextProvider>
+        
                 <div>
                     <AppBar/>
                     <div className='h-14'></div>
                     {children}
                     <BottomTab/>
                 </div>
-        </SocketContextProvider>
+      
             
     )
 }

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import Logo from "../components/logo"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { ValidateEmail, ValidatePassword } from '../utils/validations';
+import { GlobalContext } from '../context/context';
 
 export default function LoginScreen(){
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
 
     const [isDisableLoginBtn, setIsDisableLoginBtn] = useState(true)
+
+    const globalContext = useContext(GlobalContext);
 
 
     const navigate = useNavigate()
@@ -18,15 +21,20 @@ export default function LoginScreen(){
         setIsDisableLoginBtn(!(ValidateEmail(email) && ValidatePassword(password)))        
     },[email, password])
 
-    const onClickLogin = () =>{
+    const onClickLogin = async () =>{
         /**
          * 
          * handle login here
          * get the authentication token
          * store it in the localstorage
          */
-        navigate("/rooms")
+        await globalContext.loginAsync(email, password);
     }
+    useEffect(()=>{
+        if(globalContext.isLoggedIn){
+            navigate("/rooms")
+        }
+    },[globalContext.isLoggedIn])
 
 
 

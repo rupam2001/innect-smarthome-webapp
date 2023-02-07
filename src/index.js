@@ -5,11 +5,17 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import SocketContextProvider from './context/socket_context';
+import GlobalContextProvider from './context/context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
-       <App />
+        <GlobalContextProvider>
+            <SocketContextProvider>
+                <App />
+            </SocketContextProvider>
+        </GlobalContextProvider>
     </BrowserRouter>
 );
 
