@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ENDPOINT, SOKETENDPOINT } from "../constants";
-import { GetAccessToken, SetAccessToken, SetWsToken } from "../utils/storage.";
+import { GetAccessToken, GetWsToken, SetAccessToken, SetWsToken } from "../utils/storage.";
 
 
 const GlobalContext = React.createContext(null);
@@ -12,7 +12,7 @@ export default function GlobalContextProvider({ children}) {
   const [devices, setDevices] = useState(null);
   const [rooms, setRooms] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
+  const [isWsTokenAvailable, setIsWsTokenAvailable] = useState(false)
 
   const fetchDevicesAsync = async () =>{
     const accessToken = GetAccessToken();
@@ -21,7 +21,7 @@ export default function GlobalContextProvider({ children}) {
         const res = await fetch(ENDPOINT + "/get_devices", {
             method:"POST", 
             headers: {'Content-Type': 'application/json'}, 
-            body:JSON.stringify({accessToken:"<DUMMY>"})
+            body:JSON.stringify({accessToken: GetAccessToken()})
         }).then(r => r.json());
 
         setDevices(res)
@@ -50,8 +50,13 @@ export default function GlobalContextProvider({ children}) {
   }
 
   useEffect(()=>{
-    fetchDevicesAsync();
-  },[])
+    (async () =>{
+        if(isLoggedIn){
+            await fetchDevicesAsync();
+            await fetchWsTokenAsync();
+        }
+    })()
+  },[isLoggedIn])
 
   useEffect(()=>{
     if(devices)
@@ -83,7 +88,12 @@ export default function GlobalContextProvider({ children}) {
   },[])
 
   const fetchWsTokenAsync = async () => {
-    if(!isLoggedIn) return;
+    if(GetWsToken() != undefined){
+        setIsWsTokenAvailable(true)
+        alert("GetWsTOken fetch")
+        return;
+    };
+
     try {
         const res = await fetch(ENDPOINT + "/get_wstoken", {
             method:"POST", 
@@ -91,16 +101,18 @@ export default function GlobalContextProvider({ children}) {
             body:JSON.stringify({accessToken: GetAccessToken()})
         }).then(r => r.json());
         if(res.success){
-            SetWsToken(res.wstoken)
+            SetWsToken(res.wstoken)  //volatile
+            setIsWsTokenAvailable(true)
         }
     } catch (error) {
-        
+        alert("unable to get wstokens")
     }
   }
 
-  useEffect(()=>{
-    fetchWsTokenAsync();
-  }, [isLoggedIn])
+//   useEffect(()=>{
+//     if(isLoggedIn)
+//         fetchWsTokenAsync();
+//   }, [isLoggedIn])
 
 
   return (
@@ -109,7 +121,8 @@ export default function GlobalContextProvider({ children}) {
        rooms,
        devices,
        loginAsync,
-       isLoggedIn
+       isLoggedIn,
+       isWsTokenAvailable
       }}
     >
       {children}

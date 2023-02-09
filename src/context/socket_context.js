@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { Alert } from "react-native";
 import { ENDPOINT, SOKETENDPOINT } from "../constants";
+import { GetWsToken } from "../utils/storage.";
+import { GlobalContext } from "./context";
 // import {
 //   getAccessTokenAsync,
 //   getDeviceIdAsync,
@@ -9,15 +11,25 @@ import { ENDPOINT, SOKETENDPOINT } from "../constants";
 
 const SocketContext = React.createContext(null);
 
-const test_wstoken = "wstoken123"
+// const GetWsToken() = "wstoken123"
 
-export default function SocketContextProvider({ children, isLoggedIn }) {
-  const [ws, setWs] = useState(new WebSocket(SOKETENDPOINT));
+export default function SocketContextProvider({ children }) {
+  const [ws, setWs] = useState(null);
   const [messageQueue, setMessageQueue] = useState([]);
   const [onMessage, setOnMessage] = useState(null);
   const [sendMsgQueue, setSendMsgQueue] = useState([]);
 
+  const globalContext = useContext(GlobalContext);
+
+  const establishSocketConn = () =>{
+    setWs(new WebSocket(SOKETENDPOINT));
+  }
+
   const init = () => {
+    console.log(globalContext.isLoggedIn, globalContext.isWsTokenAvailable, "init()")
+    if(!globalContext.isLoggedIn) return;
+    if(!globalContext.isWsTokenAvailable) return;
+
     if (ws && ws.OPEN && !ws.CONNECTING) {
       ws.addEventListener("close", handleClose);
       ws.addEventListener("error", handleError);
@@ -27,15 +39,21 @@ export default function SocketContextProvider({ children, isLoggedIn }) {
         sendMessage(
           JSON.stringify({
             app_init: true,
-            wstoken: test_wstoken
+            wstoken: GetWsToken()
           })
         );
       });
     }
   };
   useEffect(() => {
+    if(!globalContext.isLoggedIn) return;
+    if(!globalContext.isWsTokenAvailable) return;
+    if(!ws){
+      establishSocketConn();
+    }
     init();
-  }, [ws]);
+
+  }, [ws, globalContext.isWsTokenAvailable, globalContext.isLoggedIn]);
 
   const handleClose = () => {
     reconnect();
@@ -85,20 +103,20 @@ export default function SocketContextProvider({ children, isLoggedIn }) {
 
 
   const getStates = () =>{
-    sendMessage(JSON.stringify({getStates: true, wstoken: test_wstoken}))
+    sendMessage(JSON.stringify({getStates: true, wstoken: GetWsToken()}))
   }
 
   const sendMessage = (msg) => {
     // console.log(ws);
     msg = JSON.parse(msg)
-    msg = {...msg, wstoken: test_wstoken}
+    msg = {...msg, wstoken: GetWsToken()}
     msg = JSON.stringify(msg)
     if (!ws) {
       reconnect();
     }
     try {
       ws.send(msg);
-      console.log("message sent")
+      console.log("message sent", msg)
     } catch (error) {
       console.log(error);
     }

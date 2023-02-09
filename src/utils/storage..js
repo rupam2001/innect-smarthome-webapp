@@ -5,9 +5,16 @@ export function GetAccessToken(){
     return localStorage.getItem("access_token");
 }
 
+
+
+
+let ws_token = null
+//volatile 
 export function SetWsToken(token){
-    localStorage.setItem("ws_token", token);
+    sessionStorage.setItem("ws_token", token);
+    ws_token = token
 }
 export function GetWsToken(){
-    return localStorage.getItem("ws_token");
+    return ws_token;
+    return sessionStorage.getItem("ws_token");
 }
