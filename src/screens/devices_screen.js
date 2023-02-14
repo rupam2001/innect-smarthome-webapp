@@ -9,7 +9,7 @@ import { DUMMY_ROOMS } from '../data/dummy_data';
 import { FormControlLabel, Switch } from '@mui/material';
 import IOSSwitch from '../components/switch';
 import { getDeviceIDForUI, IsDeviceOnline } from '../utils/helpers';
-import { CircleRounded } from '@mui/icons-material';
+import { CircleRounded, PlayArrow } from '@mui/icons-material';
 import { GlobalContext } from '../context/context';
 import { SocketContext } from '../context/socket_context';
 
@@ -100,11 +100,16 @@ export default function DevicesScreen(){
                 <Typography color="text.primary">Devices:</Typography>
              </Breadcrumbs>
             </div>
-            <div className='m-2'>
+            <div className='m-2 mb-24'>
                 { roomData && roomData.devices.map(device => (
                     <div className='m-2'>
                         <div className='my-2 flex items-center'>
-                            <div className='font-bold'>Device {getDeviceIDForUI(device)}:</div>
+                            <div className='font-bold'> 
+                        
+                            <span>
+                                 Device {getDeviceIDForUI(device)}:
+                            </span>
+                            </div>
                             <div className='mx-2 font-bold'>
                                 { getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#22c55e"}} />}
                                 { !getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#e11d48"}} />}

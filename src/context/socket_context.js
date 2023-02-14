@@ -1,13 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-// import { Alert } from "react-native";
 import { ENDPOINT, SOKETENDPOINT } from "../constants";
 import { GetWsToken } from "../utils/storage.";
 import { GlobalContext } from "./context";
-// import {
-//   getAccessTokenAsync,
-//   getDeviceIdAsync,
-//   getWsTokenAsync,
-// } from "../storage/authdata";
+
 
 const SocketContext = React.createContext(null);
 
@@ -18,6 +13,7 @@ export default function SocketContextProvider({ children }) {
   const [messageQueue, setMessageQueue] = useState([]);
   const [onMessage, setOnMessage] = useState(null);
   const [sendMsgQueue, setSendMsgQueue] = useState([]);
+  const [wsStatus, setWsStatus] = useState(false)
 
   const globalContext = useContext(GlobalContext);
 

@@ -7,15 +7,18 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import SocketContextProvider from './context/socket_context';
 import GlobalContextProvider from './context/context';
+import UIContextProvider from './context/ui_context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
-        <GlobalContextProvider>
-            <SocketContextProvider>
-                <App />
-            </SocketContextProvider>
-        </GlobalContextProvider>
+        <UIContextProvider>
+            <GlobalContextProvider>
+                <SocketContextProvider>
+                    <App />
+                </SocketContextProvider>
+            </GlobalContextProvider>
+        </UIContextProvider>
     </BrowserRouter>
 );
 

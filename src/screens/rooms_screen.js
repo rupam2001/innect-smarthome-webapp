@@ -4,12 +4,32 @@ import InAppLayout from '../layouts/InAppLayout';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Card } from '@mui/material';
+import { Card, TextField } from '@mui/material';
 
 import useLongPress from "../utils/useLongPress";
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Circles } from 'react-loader-spinner';
 import { GlobalContext } from '../context/context';
+
+
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { UIContext } from '../context/ui_context';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    height:"60%",
+    p: 4,
+    
+  };
 
 
 export default function RoomsScreen(){
@@ -18,11 +38,21 @@ export default function RoomsScreen(){
     const navigate = useNavigate()
 
     const globalContext = useContext(GlobalContext)
+    const uiContext = useContext(UIContext)
+
+    //modal
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    
+    const [selectedRoom, setSelectedRoom] = useState(null)
 
 
     
-    const onLongPress = ()=>{
-       
+    const onLongPress = (e)=>{
+       setOpen(true)
+       setSelectedRoom(e.target.innerText)
+       console.log(e.target)
     }
     const onClickRoom = (e) =>{
         navigate({pathname:"/devices", search: createSearchParams({room_id: e._id, title: e.title}).toString()})
@@ -33,6 +63,21 @@ export default function RoomsScreen(){
     // const getRooms = () =>{
     //     return globalContext.rooms ? globalContext.rooms : []
     // }
+
+    const handleRoomDetailChangeSubmit = async () =>{
+        //
+        if(selectedRoom.length < 4) {
+            return alert("Room name too short")
+        }
+        if(selectedRoom.length > 50){
+            return alert("Room name too long")
+        }
+        await globalContext.editRoomDetailsAsync({ title: selectedRoom})
+        setOpen(false)
+        
+    }
+
+
 
 
 
@@ -71,19 +116,31 @@ export default function RoomsScreen(){
                             }
                         </Grid>
                     </Box>
+
+
+                    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+            <div className='flex flex-col'>
+                <div className='mb-4 text-xl' style={{color: uiContext.currentTheme.primary}}>Change room details: </div>
+                <TextField id="outlined-basic" label="" variant="outlined" value={selectedRoom} autoFocus={true} onChange={(e)=>{  setSelectedRoom(e.target.value) }}/>
+                <div className='mt-10 flex justify-end'>
+                    <Button variant="text" style={{color: uiContext.currentTheme.secondary}} onClick={handleRoomDetailChangeSubmit}>Ok</Button>
+                    <Button variant="text" style={{color: uiContext.currentTheme.danger}} onClick={handleClose}>Cancel</Button>
+                </div>
+            </div>
+        </Box>
+      </Modal>
                             
                 </div>
             </InAppLayout>
     )
 }
 
-// const Item = styled(Paper)(({ theme }) => ({
-//     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//     ...theme.typography.body2,
-//     padding: theme.spacing(1),
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-// }));
 
 const Item = ({children}) => (
     <Card style={{ height:"7rem", display:"flex", "justifyContent":"center", "alignItems":"center"}}>

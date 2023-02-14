@@ -14,6 +14,8 @@ export default function GlobalContextProvider({ children}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isWsTokenAvailable, setIsWsTokenAvailable] = useState(false)
 
+  const [userData, setUserData] = useState(null)
+
   const fetchDevicesAsync = async () =>{
     const accessToken = GetAccessToken();
     // if(!accessToken) return;
@@ -108,12 +110,38 @@ export default function GlobalContextProvider({ children}) {
         alert("unable to get wstokens")
     }
   }
+  
+  const editRoomDetailsAsync = async (data) => {
+    try {
+      const res = await fetch(ENDPOINT + "/room/edit", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({accessToken: GetAccessToken(), ...data})
+      }).then(r => r.json())
 
-//   useEffect(()=>{
-//     if(isLoggedIn)
-//         fetchWsTokenAsync();
-//   }, [isLoggedIn])
+      if(res.success){
+        await fetchDevicesAsync();
+      }
+    } catch (error) {
+      console.log(error)
+      alert("Unable to edit")
+    }
+  }
 
+  const fetchUserDataAsync = async (forced) => {
+    if(!forced && userData) return;
+    try {
+      const res = await fetch(ENDPOINT + "/get_user_data", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({accessToken: GetAccessToken()})
+      }).then(r => r.json())
+      setUserData(res)
+    } catch (error) {
+      console.log(error)
+      alert("Unable to edit")
+    }
+  }
 
   return (
     <GlobalContext.Provider
@@ -122,7 +150,10 @@ export default function GlobalContextProvider({ children}) {
        devices,
        loginAsync,
        isLoggedIn,
-       isWsTokenAvailable
+       isWsTokenAvailable,
+       editRoomDetailsAsync,
+       fetchUserDataAsync,
+       userData
       }}
     >
       {children}

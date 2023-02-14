@@ -22,12 +22,6 @@ export default function LoginScreen(){
     },[email, password])
 
     const onClickLogin = async () =>{
-        /**
-         * 
-         * handle login here
-         * get the authentication token
-         * store it in the localstorage
-         */
         await globalContext.loginAsync(email, password);
     }
     useEffect(()=>{
