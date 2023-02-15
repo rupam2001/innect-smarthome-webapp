@@ -42,7 +42,7 @@ export default function BottomTab(){
     
 
     return (
-        <div className='bg-white  border-gray-400 border-t-2 fixed bottom-0 w-full'>
+        <div className='bg-white  border-sky-400 border-t-2 fixed bottom-0 w-full'>
              <BottomNavigation
                 showLabels
                 value={uiContext.currentTab}

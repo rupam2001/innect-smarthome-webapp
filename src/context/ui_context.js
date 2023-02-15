@@ -8,7 +8,7 @@ const UIContext = React.createContext(null);
 
 export default function UIContextProvider({ children}) {
   const themes = {
-    light:{primary: "#1e40af", secondary:"#16a34a", minor:"#52525b", text1:"white", text2:"#171717", danger:"red"},
+    light:{primary: "white", secondary:"#16a34a", minor:"#52525b", text1:"white", text2:"#171717", danger:"red"},
     dark:{primary:"#171717", secondary:"#16a34a", minor:"#52525b", text1: "white", text2:"#a8a29e", danger:"red"}
   }
   const [currentTheme, setCurrentTheme] = useState(themes.light)

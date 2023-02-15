@@ -102,25 +102,23 @@ export default function DevicesScreen(){
             </div>
             <div className='m-2 mb-24'>
                 { roomData && roomData.devices.map(device => (
-                    <div className='m-2'>
+                    <div className='m-2 '>
                         <div className='my-2 flex items-center'>
                             <div className='font-bold'> 
-                        
-                            <span>
-                                 Device {getDeviceIDForUI(device)}:
-                            </span>
+                                <span>
+                                    Device {getDeviceIDForUI(device)}:
+                                </span>
                             </div>
                             <div className='mx-2 font-bold'>
                                 { getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#22c55e"}} />}
                                 { !getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#e11d48"}} />}
                             </div>
-
                         </div>
-                        <hr/>
+                        <hr className='bg-sky-400'/>
                         {
                             device.switches.map(s => (
                                 <div className='flex w-full justify-between my-4 items-center' key={s._id}>
-                                    <div className='text-xl'>{s.title}</div>
+                                    <div className='text-xl text-sky-400 font-bold'>{s.title}</div>
                                     <IOSSwitch sx={{ m: 1 }} checked={getSwitchState(device, s)} onChange={(e) => handleSwitchToggle(e, device, s)} />
                                 </div>
                             ))

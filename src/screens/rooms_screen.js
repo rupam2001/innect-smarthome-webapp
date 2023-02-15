@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { DUMMY_ROOMS } from '../data/dummy_data';
+import React, { useContext, useState } from 'react';
 import InAppLayout from '../layouts/InAppLayout';
 
 import Grid from '@mui/material/Grid';
@@ -8,12 +7,11 @@ import { Card, TextField } from '@mui/material';
 
 import useLongPress from "../utils/useLongPress";
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Circles } from 'react-loader-spinner';
+import { Circles, Rings } from 'react-loader-spinner';
 import { GlobalContext } from '../context/context';
 
 
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { UIContext } from '../context/ui_context';
 
@@ -60,9 +58,6 @@ export default function RoomsScreen(){
 
     const longPressEvent = useLongPress(onLongPress, (e) => { }, { shouldPreventDefault: !true, delay: 500})
 
-    // const getRooms = () =>{
-    //     return globalContext.rooms ? globalContext.rooms : []
-    // }
 
     const handleRoomDetailChangeSubmit = async () =>{
         //
@@ -85,7 +80,7 @@ export default function RoomsScreen(){
     return (
         <InAppLayout>
             <div className='h-screen flex justify-center items-center'>
-                <Circles
+                <Rings
                     height="70"
                     width="70"
                     color="#0ea5e9"
@@ -108,34 +103,31 @@ export default function RoomsScreen(){
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                             {globalContext.rooms?.map(room => 
                                 <Grid item xs={6} {...longPressEvent}>
-                                    <div onClick={(e) => onClickRoom(room)}>
-                                        <Item>{room.title}</Item>
+                                    <div onClick={(e) => onClickRoom(room)} className="">
+                                        <Item><span className='text-white font-bold'>{room.title}</span></Item>
                                     </div>
                                 </Grid>
                                 )
                             }
                         </Grid>
                     </Box>
-
-
                     <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-            <div className='flex flex-col'>
-                <div className='mb-4 text-xl' style={{color: uiContext.currentTheme.primary}}>Change room details: </div>
-                <TextField id="outlined-basic" label="" variant="outlined" value={selectedRoom} autoFocus={true} onChange={(e)=>{  setSelectedRoom(e.target.value) }}/>
-                <div className='mt-10 flex justify-end'>
-                    <Button variant="text" style={{color: uiContext.currentTheme.secondary}} onClick={handleRoomDetailChangeSubmit}>Ok</Button>
-                    <Button variant="text" style={{color: uiContext.currentTheme.danger}} onClick={handleClose}>Cancel</Button>
-                </div>
-            </div>
-        </Box>
-      </Modal>
-                            
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description">
+                        <Box sx={style}>
+                            <div className='flex flex-col'>
+                                <div className='mb-4 text-xl' style={{color: uiContext.currentTheme.primary}}>Change room details: </div>
+                                <TextField id="outlined-basic" label="" variant="outlined" value={selectedRoom} autoFocus={true} onChange={(e)=>{  setSelectedRoom(e.target.value) }}/>
+                                
+                                <div className='mt-10 flex justify-end'>
+                                    <Button variant="text" style={{color: uiContext.currentTheme.secondary}} onClick={handleRoomDetailChangeSubmit}>Ok</Button>
+                                    <Button variant="text" style={{color: uiContext.currentTheme.danger}} onClick={handleClose}>Cancel</Button>
+                                </div>
+                            </div>
+                        </Box>
+                    </Modal>  
                 </div>
             </InAppLayout>
     )
@@ -143,7 +135,7 @@ export default function RoomsScreen(){
 
 
 const Item = ({children}) => (
-    <Card style={{ height:"7rem", display:"flex", "justifyContent":"center", "alignItems":"center"}}>
+    <Card style={{ height:"7rem", display:"flex", "justifyContent":"center", "alignItems":"center", backgroundColor:"#0ea5e9", textAlign:'center'}} className='rounded-sm'>
         {children}
     </Card>
 )

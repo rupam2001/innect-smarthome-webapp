@@ -50,6 +50,8 @@ export default function SocketContextProvider({ children }) {
     init();
 
   }, [ws, globalContext.isWsTokenAvailable, globalContext.isLoggedIn]);
+  
+
 
   const handleClose = () => {
     reconnect();

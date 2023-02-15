@@ -92,7 +92,6 @@ export default function GlobalContextProvider({ children}) {
   const fetchWsTokenAsync = async () => {
     if(GetWsToken() != undefined){
         setIsWsTokenAvailable(true)
-        alert("GetWsTOken fetch")
         return;
     };
 

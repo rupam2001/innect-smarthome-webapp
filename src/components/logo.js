@@ -1,6 +1,9 @@
 import React from 'react';
 export default function Logo(){
     return <div className='font-bold'>
-        Innect
+        <div>
+            Innect 
+        </div>
+        <div className='text-xs'>Smart Home</div>
     </div>
 }
