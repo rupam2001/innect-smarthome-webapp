@@ -75,9 +75,14 @@ export default function GlobalContextProvider({ children}) {
         if(res.success){
             setIsLoggedIn(true);
             SetAccessToken(res.accessToken);
+            return {success: true}
         }
+        else{
+          return {success: false, msg: res.msg}
+        }
+
     } catch (error) {
-        alert("login failed")
+        return {success: false, msg: "Login Failed" }
     }
   }
   const autoAuthAsync = async () =>{

@@ -13,7 +13,7 @@ export default function SocketContextProvider({ children }) {
   const [messageQueue, setMessageQueue] = useState([]);
   const [onMessage, setOnMessage] = useState(null);
   const [sendMsgQueue, setSendMsgQueue] = useState([]);
-  const [wsStatus, setWsStatus] = useState(false)
+  const [wsStatus, setWsStatus] = useState("connecting")
 
   const globalContext = useContext(GlobalContext);
 
@@ -32,6 +32,7 @@ export default function SocketContextProvider({ children }) {
       ws.addEventListener("message", handleOnMessage);
       ws.addEventListener("open", async () => {
         //get the initial states of all the devices
+        setWsStatus("connected")
         sendMessage(
           JSON.stringify({
             app_init: true,
@@ -60,6 +61,7 @@ export default function SocketContextProvider({ children }) {
   const handleError = (event) => {
     // console.error(event);
     console.log("error, reconnecting...", event);
+    setWsStatus("connecting")
     reconnect();
   };
   const reconnect = () => {
@@ -135,6 +137,7 @@ export default function SocketContextProvider({ children }) {
         ws,
         reconnect,
         init,
+        wsStatus
       }}
     >
       {children}

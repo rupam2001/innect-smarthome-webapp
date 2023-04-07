@@ -12,9 +12,12 @@ import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { Help, Logout, Settings } from '@mui/icons-material';
+import { RemoveAccessToken, RemoveWsToken } from '../utils/storage.';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileScreen(){
     const globalContext = useContext(GlobalContext)
+    const navigate = useNavigate()
     const init = async () =>{
         await globalContext.fetchUserDataAsync();
     }
@@ -26,6 +29,13 @@ export default function ProfileScreen(){
         return <InAppLayout>
 
         </InAppLayout>
+    }
+
+    const handleLogout = () =>{
+        RemoveAccessToken()
+        RemoveWsToken()
+        navigate("/")
+        window.location.reload()
     }
 
 
@@ -46,36 +56,36 @@ export default function ProfileScreen(){
 
                 <div className='w-full mt-4' >
                     <Divider/>
-                <List>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                        <ListItemIcon>
-                            <Settings />
-                        </ListItemIcon>
-                        <ListItemText primary="Settings" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                        <ListItemIcon>
-                            <Help />
-                        </ListItemIcon>
-                        <ListItemText primary="Help" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                        <ListItemIcon>
-                            <Logout />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                        <ListItemText primary="About us" />
-                        </ListItemButton>
-                    </ListItem>
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Settings />
+                                </ListItemIcon>
+                                <ListItemText primary="Settings" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Help />
+                                </ListItemIcon>
+                                <ListItemText primary="Help" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleLogout}>
+                                <ListItemIcon>
+                                    <Logout />
+                                </ListItemIcon>
+                                <ListItemText primary="Logout" />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemText primary="About us" />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </div>
 

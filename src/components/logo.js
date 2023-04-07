@@ -1,9 +1,7 @@
 import React from 'react';
-export default function Logo(){
-    return <div className='font-bold'>
-        <div>
-            Innect 
-        </div>
-        <div className='text-xs'>Smart Home</div>
+import logo from '../logo.png'
+export default function Logo({imgStyle}){
+    return <div className='flex justify-center items-center'>
+            <img src={logo} className=""  style={imgStyle ? imgStyle : {width: "60%"}}/>
     </div>
 }

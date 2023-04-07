@@ -14,6 +14,12 @@ import { GlobalContext } from '../context/context';
 import { SocketContext } from '../context/socket_context';
 
 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
+
+
 export default function DevicesScreen(){
     const [searchParams] = useSearchParams();
     const [roomId, setRoomId] = useState(searchParams.get("room_id"))
@@ -88,6 +94,14 @@ export default function DevicesScreen(){
         return d != -1;
     }
 
+    useEffect(()=>{
+        console.log("roomData")
+        const {sendMessage} = socketContext;
+        if(roomData == null) return
+
+        sendMessage(JSON.stringify({is_command: true, device_id: roomData.devices.map(d=> d._id) , command: ""}))
+    },[roomData])
+
     return (
         <InAppLayout>
             <div className='m-2 text-green-500'>
@@ -102,8 +116,31 @@ export default function DevicesScreen(){
             </div>
             <div className='m-2 mb-24'>
                 { roomData && roomData.devices.map(device => (
-                    <div className='m-2 '>
-                        <div className='my-2 flex items-center'>
+
+                    <div  key={device._id} >
+                        {/* <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel2a-content"
+                            id="panel2a-header"
+                            
+                            >
+                            <Typography>                                     */}
+                            <div className='my-2 flex items-center'>
+                                <div className='font-bold'> 
+                                    <span>
+                                        Device {getDeviceIDForUI(device)}:
+                                    </span>
+                                </div>
+                                <div className='mx-2 font-bold'>
+                                    { getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#22c55e"}} />}
+                                    { !getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#e11d48"}} />}
+                                </div>
+                            </div>
+                            {/* </Typography>
+                        </AccordionSummary> */}
+
+                    <div className='m-2 ml-4'>
+                        {/* <div className='my-2 flex items-center'>
                             <div className='font-bold'> 
                                 <span>
                                     Device {getDeviceIDForUI(device)}:
@@ -113,7 +150,7 @@ export default function DevicesScreen(){
                                 { getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#22c55e"}} />}
                                 { !getDeviceStatus(device)&& <CircleRounded style={{fontSize:"small", color:"#e11d48"}} />}
                             </div>
-                        </div>
+                        </div> */}
                         <hr className='bg-sky-400'/>
                         {
                             device.switches.map(s => (
@@ -124,6 +161,8 @@ export default function DevicesScreen(){
                             ))
                         }
                     </div>
+                    </div>
+
                 ))}
             </div>
         </InAppLayout>

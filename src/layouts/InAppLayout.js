@@ -10,7 +10,9 @@ export default function InAppLayout({children}){
                 <div>
                     <AppBar/>
                     <div className='h-14'></div>
-                    {children}
+                    <div style={{}}>
+                        {children}
+                    </div>
                     <BottomTab/>
                 </div>
       

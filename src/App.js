@@ -9,6 +9,7 @@ import SocketContextProvider from './context/socket_context';
 import NotificationScreen from './screens/notification_screen';
 import ProfileScreen from './screens/profile_screen';
 import { GlobalContext } from './context/context';
+import ClearCacheScreen from './screens/clearCache_screen';
 
 function App() {
   const globalContext = useContext(GlobalContext)
@@ -31,6 +32,8 @@ function App() {
         <Route path="/devices" element={ <DevicesScreen/> } />
         <Route path='/notifications' element={<NotificationScreen/>}/>
         <Route path='/profile' element={<ProfileScreen/>}/>
+        <Route path='/profile/clear_cache' element={<ClearCacheScreen/>}/>
+
       </Routes>
     </div>
   );

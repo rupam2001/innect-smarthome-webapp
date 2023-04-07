@@ -4,6 +4,9 @@ export function SetAccessToken(token){
 export function GetAccessToken(){
     return localStorage.getItem("access_token");
 }
+export function RemoveAccessToken(){
+    localStorage.removeItem("access_token")
+}
 
 
 
@@ -17,4 +20,8 @@ export function SetWsToken(token){
 export function GetWsToken(){
     // return ws_token;
     return sessionStorage.getItem("ws_token");
+}
+
+export function RemoveWsToken(){
+    sessionStorage.removeItem("ws_token")
 }
