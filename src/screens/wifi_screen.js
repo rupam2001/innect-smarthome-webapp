@@ -40,8 +40,7 @@ export default function WifiScreen() {
       const res = await fetch(ESPENDPOINT + "/", {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          // "Access-Control-Allow-Origin": "*",
         },
       });
       setConnected(true);
@@ -85,19 +84,21 @@ export default function WifiScreen() {
   };
 
   const onClickConnect = async () => {
+    const data = new URLSearchParams();
+    data.append("ssid", typedSSID);
+    data.append("password", typedPassword);
     //
     try {
-      const res = await fetch(
-        "http://" +
-          ESPENDPOINT +
-          `/setwifisettings?ssid=${typedSSID}&pwd=${typedPassword}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      ).then((r) => r.json());
+      const res = await fetch(ESPENDPOINT + `/set_wifi`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data,
+      }).then((r) => r.text());
       setWifiConnected(true);
-    } catch (error) {}
+      alert("Connected!");
+    } catch (error) {
+      alert("Something went wrong");
+    }
   };
 
   if (connected) {
